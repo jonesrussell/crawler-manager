@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Crawlsite extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'url',
+    ];
 }

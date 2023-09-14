@@ -35,23 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Add the Inertia routes for Crawlsites
-    Route::get('/crawlsites', [CrawlsiteController::class, 'index'])
-        ->name('crawlsites.index');
-
-    Route::get('/crawlsites/create', [CrawlsiteController::class, 'create'])
-        ->name('crawlsites.create');
-
-    Route::post('/crawlsites', [CrawlsiteController::class, 'store'])->name('crawlsites.store');
-    Route::get('/crawlsites/{crawlsite}', [CrawlsiteController::class, 'show'])
-        ->name('crawlsites.show');
-
-    Route::get('/crawlsites/{crawlsite}/edit', [CrawlsiteController::class, 'edit'])
-        ->name('crawlsites.edit');
-
-    Route::put('/crawlsites/{crawlsite}', [CrawlsiteController::class, 'update'])->name('crawlsites.update');
-    Route::delete('/crawlsites/{crawlsite}', [CrawlsiteController::class, 'destroy'])
-        ->name('crawlsites.destroy');
+    Route::resource('crawlsites', CrawlsiteController::class);
 });
 
 require __DIR__.'/auth.php';

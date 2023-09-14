@@ -2,55 +2,99 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Crawlsite;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Models\Crawlsite; // Make sure to add the Crawlsite model import
 
 class CrawlsiteController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $crawlsites = Crawlsite::all();
-        return Inertia::render('Crawlsites/Index', ['crawlsites' => $crawlsites]);
+
+        return Inertia::render(
+            'Crawlsites/Index',
+            [
+                'crawlsites' => $crawlsites
+            ]
+        );
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return Inertia::render('Crawlsites/Create');
+        return Inertia::render(
+            'Crawlsites/Create'
+        );
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        // Validate and store the new Crawlsite here
-        // ...
+        $request->validate([
+            'url' => 'required|string|max:255',
+        ]);
+        Crawlsite::create([
+            'url' => $request->url,
+        ]);
+        sleep(1);
 
-        return redirect()->route('crawlsites.index');
+        return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Created Successfully');
     }
 
-    public function show(Crawlsite $crawlsite)
+    /**
+     * Display the specified resource.
+     */
+    public function show(Crawlsite $Crawlsite)
     {
-        return Inertia::render('Crawlsites/Show', ['crawlsite' => $crawlsite]);
+        //
     }
 
-    public function edit(Crawlsite $crawlsite)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Crawlsite $Crawlsite)
     {
-        return Inertia::render('Crawlsites/Edit', ['crawlsite' => $crawlsite]);
+        return Inertia::render(
+            'Crawlsites/Edit',
+            [
+                'Crawlsite' => $Crawlsite
+            ]
+        );
     }
 
-    public function update(Request $request, Crawlsite $crawlsite)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Crawlsite $Crawlsite)
     {
-        // Validate and update the Crawlsite here
-        // ...
+        $request->validate([
+            'url' => 'required|string|max:255',
+        ]);
 
-        return redirect()->route('crawlsites.index');
+        $Crawlsite->url = $request->url;
+        $Crawlsite->save();
+        sleep(1);
+
+        return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Updated Successfully');
     }
 
-    public function destroy(Crawlsite $crawlsite)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Crawlsite $Crawlsite)
     {
-        // Delete the Crawlsite here
-        // ...
+        $Crawlsite->delete();
+        sleep(1);
 
-        return redirect()->route('crawlsites.index');
+        return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Delete Successfully');
     }
 }
 
