@@ -17,6 +17,7 @@ class CrawlsiteFactory extends Factory
     public function definition(): array
     {
         return [
+            'title' => $this->faker->sentence,
             'url' => $this->faker->url,
         ];
     }

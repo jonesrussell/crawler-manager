@@ -64,11 +64,12 @@ class CrawlsiteController extends Controller
      */
     public function edit(Crawlsite $Crawlsite)
     {
+        // dd($Crawlsite->tags->pluck('name')->toArray());
         return Inertia::render(
             'Crawlsites/Edit',
             [
                 'Crawlsite' => $Crawlsite,
-                'tags' => $Crawlsite->tags->pluck('name'), // Pass the existing tags to your view
+                'tags' => $Crawlsite->tags->pluck('name')->toArray(), // Pass the existing tags to your view
             ]
         );
     }
