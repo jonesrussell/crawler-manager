@@ -13,7 +13,7 @@ class CrawlsiteController extends Controller
      */
     public function index()
     {
-        $crawlsites = Crawlsite::with('tags')->get();
+        $crawlsites = Crawlsite::all();
      
         return Inertia::render(
             'Crawlsites/Index',
@@ -64,12 +64,10 @@ class CrawlsiteController extends Controller
      */
     public function edit(Crawlsite $Crawlsite)
     {
-        // dd($Crawlsite->tags->pluck('name')->toArray());
         return Inertia::render(
             'Crawlsites/Edit',
             [
                 'Crawlsite' => $Crawlsite,
-                'tags' => $Crawlsite->tags->pluck('name')->toArray(), // Pass the existing tags to your view
             ]
         );
     }
@@ -81,24 +79,11 @@ public function update(Request $request, Crawlsite $Crawlsite)
 {
     $request->validate([
         'url' => 'required|string|max:255',
-        'tags' => 'nullable|array', // Assuming tags are sent as an array
     ]);
 
     $Crawlsite->url = $request->url;
     $Crawlsite->save();
 
-    // Attach the tags
-    if ($request->has('tags')) {
-        $tags = $request->input('tags');
-
-        // Attach a single tag
-        if (is_string($tags)) {
-            $Crawlsite->attachTag($tags);
-        } else {
-            // Attach multiple tags
-            $Crawlsite->attachTags($tags);
-        }
-    }
 
     return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Updated Successfully');
 }
@@ -109,9 +94,6 @@ public function update(Request $request, Crawlsite $Crawlsite)
      */
     public function destroy(Crawlsite $Crawlsite)
     {
-        // Detach tags before deleting the model
-        $Crawlsite->detachTags();
-
         $Crawlsite->delete();
 
         return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Delete Successfully');
