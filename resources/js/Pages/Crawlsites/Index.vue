@@ -47,6 +47,9 @@ function destroy(id) {
                                             URL
                                         </th>
                                         <th scope="col" class="px-6 py-3">
+                                            Tags
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
                                             Edit
                                         </th>
                                         <th scope="col" class="px-6 py-3">
@@ -62,7 +65,14 @@ function destroy(id) {
                                             {{ Crawlsite.id }}
                                         </th>
                                         <td class="px-6 py-4">
-                                            <Link :href="route('crawlsites.show', Crawlsite.id)" target="_blank">{{ Crawlsite.url }}</Link>
+                                            <Link :href="route('crawlsites.show', Crawlsite.id)" target="_blank">{{
+                                                Crawlsite.url }}</Link>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span v-for="(tag, index) in Crawlsite.tags" :key="index"
+                                                class="bg-blue-100 px-2 py-1 rounded-full text-sm text-blue-800 mr-2">
+                                                {{ tag.name.en }}
+                                            </span>
                                         </td>
 
                                         <td class="px-6 py-4">
@@ -80,8 +90,6 @@ function destroy(id) {
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
-    </AuthenticatedLayout>
-</template>
-
+    </div>
+</AuthenticatedLayout></template>
