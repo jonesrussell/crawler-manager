@@ -61,14 +61,13 @@ function destroy(id) {
                                             class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                             {{ Crawlsite.id }}
                                         </th>
-                                        <th scope="row"
-                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                            {{ Crawlsite.url }}
-                                        </th>
+                                        <td class="px-6 py-4">
+                                            <Link :href="route('crawlsites.show', Crawlsite.id)" target="_blank">{{ Crawlsite.url }}</Link>
+                                        </td>
 
                                         <td class="px-6 py-4">
-                                            <Link :href="route('crawlsites.edit', Crawlsite.id)
-                                                " class="px-4 py-2 text-white bg-blue-600 rounded-lg">Edit</Link>
+                                            <Link :href="route('crawlsites.edit', Crawlsite.id)"
+                                                class="px-4 py-2 text-white bg-blue-600 rounded-lg">Edit</Link>
                                         </td>
                                         <td class="px-6 py-4">
                                             <PrimaryButton class="bg-red-700" @click="destroy(Crawlsite.id)">

@@ -52,9 +52,11 @@ class CrawlsiteController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Crawlsite $Crawlsite)
+    public function show(Crawlsite $crawlsite)
     {
-        //
+        return Inertia::render('Crawlsites/View', [
+            'crawlsite' => $crawlsite,
+        ]);
     }
 
     /**
