@@ -16,7 +16,7 @@ const props = defineProps({
       <AuthenticatedLayout>
         <template #header>
           <h2 class="text-xl font-semibold leading-tight text-gray-800">
-            Crawlsite View
+            {{ crawlsite.title }}
           </h2>
         </template>
   
