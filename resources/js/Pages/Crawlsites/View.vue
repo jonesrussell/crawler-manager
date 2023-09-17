@@ -1,7 +1,8 @@
 <!-- resources/js/Pages/Crawlsites/View.vue -->
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-  import { defineProps } from 'vue';
+import { Head } from "@inertiajs/vue3";
+import { defineProps } from 'vue';
 
 const props = defineProps({
   crawlsite: Object,
