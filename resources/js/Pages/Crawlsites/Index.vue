@@ -34,7 +34,7 @@ function destroy(id) {
                     <div class="p-6 bg-white border-b border-gray-200">
                         <div class="mb-2">
                             <Link :href="route('crawlsites.create')">
-                            <PrimaryButton>Add Crawlsite</PrimaryButton>
+                                <PrimaryButton>Add Crawlsite</PrimaryButton>
                             </Link>
                         </div>
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -44,7 +44,7 @@ function destroy(id) {
                                     <tr>
                                         <th scope="col" class="px-6 py-3">#</th>
                                         <th scope="col" class="px-6 py-3">
-                                            URL
+                                            Title
                                         </th>
                                         <th scope="col" class="px-6 py-3">
                                             Edit
@@ -62,8 +62,8 @@ function destroy(id) {
                                             {{ Crawlsite.id }}
                                         </th>
                                         <td class="px-6 py-4">
-                                            <Link :href="route('crawlsites.show', Crawlsite.id)" target="_blank">{{
-                                                Crawlsite.url }}</Link>
+                                            <Link :href="route('crawlsites.show', Crawlsite.id)">{{
+                                                Crawlsite.title }}</Link>
                                         </td>
                                         <td class="px-6 py-4">
                                             <Link :href="route('crawlsites.edit', Crawlsite.id)"
@@ -80,6 +80,7 @@ function destroy(id) {
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
-</AuthenticatedLayout></template>
+    </AuthenticatedLayout>
+</template>

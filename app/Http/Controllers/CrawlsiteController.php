@@ -73,21 +73,21 @@ class CrawlsiteController extends Controller
     }
 
     /**
- * Update the specified resource in storage.
- */
-public function update(Request $request, Crawlsite $Crawlsite)
-{
-    $request->validate([
-        'url' => 'required|string|max:255',
-    ]);
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Crawlsite $Crawlsite)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
 
-    $Crawlsite->url = $request->url;
-    $Crawlsite->save();
+        // Update only the "title" field
+        $Crawlsite->update([
+            'title' => $request->input('title'),
+        ]);
 
-
-    return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Updated Successfully');
-}
-
+        return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Updated Successfully');
+    }
 
     /**
      * Remove the specified resource from storage.
