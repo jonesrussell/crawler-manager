@@ -6,6 +6,7 @@ import { defineProps } from 'vue';
 
 const props = defineProps({
   crawlsite: Object,
+  jobs: Array, // Add the jobs prop here
 });
 </script>
 
@@ -29,6 +30,12 @@ const props = defineProps({
                   <p>ID: {{ crawlsite.id }}</p>
                   <p>URL: {{ crawlsite.url }}</p>
                   <!-- Add more details as needed -->
+
+                  <!-- Display List of Jobs -->
+                  <h3 class="text-lg font-semibold mt-4">Jobs:</h3>
+                  <ul>
+                    <li v-for="job in jobs" :key="job.id">{{ job.name }}</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -36,5 +43,4 @@ const props = defineProps({
         </div>
       </AuthenticatedLayout>
     </div>
-  </template>
-  
+</template>

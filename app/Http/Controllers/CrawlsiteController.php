@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Crawlsite;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Jobs\CrawlerJob;
 
 class CrawlsiteController extends Controller
 {
@@ -54,8 +56,15 @@ class CrawlsiteController extends Controller
      */
     public function show(Crawlsite $crawlsite)
     {
+        // Define a list of jobs
+        $jobs = [
+            ['name' => 'CrawlerJob', 'description' => 'Crawls a website'],
+            // ['name' => 'AnotherJob', 'description' => 'Another job description'],
+        ];
+
         return Inertia::render('Crawlsites/View', [
             'crawlsite' => $crawlsite,
+            'jobs' => $jobs, // Pass the list of jobs as the 'jobs' prop
         ]);
     }
 
