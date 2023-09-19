@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Crawlsite;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Jobs\CrawlerJob;
@@ -106,6 +107,15 @@ class CrawlsiteController extends Controller
         $Crawlsite->delete();
 
         return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Delete Successfully');
+    }
+
+    public function dispatchJob(Request $request, Crawlsite $crawlsite)
+    {
+        // Dispatch the job
+        Bus::dispatch(new CrawlerJob($crawlsite));
+
+        // Optionally, you can redirect back to the view page
+        return back()->with('message', 'Job dispatched successfully');
     }
 }
 
