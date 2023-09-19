@@ -38,4 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('crawlsites', CrawlsiteController::class);
 });
 
+Route::post('/crawlsites/{crawlsite}/dispatch-job', [CrawlsiteController::class, 'dispatchJob'])
+->name('crawlsites.dispatchJob');
+
+
 require __DIR__.'/auth.php';
