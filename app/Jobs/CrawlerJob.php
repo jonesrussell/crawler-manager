@@ -47,8 +47,11 @@ class CrawlerJob implements ShouldQueue
         // Define the command to run your crawler binary with arguments
         $crawlerCommand = "{$crawlerBinaryPath} {$url} foo";
 
+        // Log the full command before executing it
+        Log::info("Running Crawler command: $crawlerCommand");
+
         // Execute the command using Laravel's Process facade
-        $result = Process::run($crawlerCommand);
+        $result = Process::forever()->run($crawlerCommand);
 
         // Log the standard output
         Log::info("Crawler job output: " . $result->output());

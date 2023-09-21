@@ -114,7 +114,7 @@ class CrawlsiteController extends Controller
     {
         Log::info('dispatchJob controller method is hit');
 
-        $url = $request->input('url'); // Replace 'url' with the actual parameter name from your request
+        $url = $crawlsite->url;
         $crawlsiteId = $crawlsite->id;
 
         // Dispatch the job with both URL and crawlsite_id as arguments
