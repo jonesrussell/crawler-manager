@@ -3,8 +3,8 @@
 namespace App\Jobs;
 
 use Illuminate\Support\Facades\Process;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -27,23 +27,37 @@ class CrawlerJob implements ShouldQueue
      */
     public function handle()
     {
-        // Define the command to run your crawler binary with arguments
-        $crawlerCommand = '/bin/crawler https://www.cp24.com foo';
+        // Log that the job has started
+        Log::info("CrawlerJob started for crawling.");
 
-        // Execute the command using Process facade
-        $process = Process::fromShellCommandline($crawlerCommand);
-        $process->run();
+        $crawlerBinaryPath = config('app.crawler_binary');
+
+        if (!file_exists($crawlerBinaryPath)) {
+            // Handle the case where the binary doesn't exist
+            $this->fail("Crawler binary does not exist at {$crawlerBinaryPath}");
+            Log::error("Crawler binary does not exist at {$crawlerBinaryPath}");
+            return;
+        }
+
+        // Define the command to run your crawler binary with arguments
+        $crawlerCommand = "{$crawlerBinaryPath} https://www.cp24.com foo";
+
+        // Execute the command using Laravel's Process facade
+        $result = Process::run($crawlerCommand);
 
         // Check if the process was successful
-        if ($process->isSuccessful()) {
-            // Handle success
-            $output = $process->getOutput();
-            // You can log or process the output here
+        if ($result->successful()) {
+            $output = $result->output();
+            // Log the output
+            Log::info("Crawler job output: $output");
         } else {
             // Handle failure
-            $errorOutput = $process->getErrorOutput();
+            $errorOutput = $result->errorOutput();
             // Log or handle the error
+            Log::error("Crawler job failed with error: $errorOutput");
         }
-    }
 
+        // Log that the job has completed
+        Log::info("CrawlerJob completed.");
+    }
 }

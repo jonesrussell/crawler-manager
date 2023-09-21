@@ -2,6 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 
+let message = null;
 
 const props = defineProps({
   crawlsite: Object,
@@ -63,5 +64,9 @@ const dispatchJob = async (jobName) => {
         </div>
       </div>
     </AuthenticatedLayout>
+
+    <div v-if="message" class="mt-4 bg-green-200 p-2 rounded">
+      {{ message }}
+    </div>
   </div>
 </template>

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Jobs\CrawlerJob;
+use Illuminate\Support\Facades\Log;
 
 class CrawlsiteController extends Controller
 {
@@ -111,6 +112,9 @@ class CrawlsiteController extends Controller
 
     public function dispatchJob(Request $request, Crawlsite $crawlsite)
     {
+        Log::info('dispatchJob controller method is hit');
+
+        
         // Dispatch the job
         Bus::dispatch(new CrawlerJob($crawlsite));
 
