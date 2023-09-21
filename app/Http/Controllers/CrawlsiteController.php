@@ -18,7 +18,7 @@ class CrawlsiteController extends Controller
     public function index()
     {
         $crawlsites = Crawlsite::all();
-     
+
         return Inertia::render(
             'Crawlsites/Index',
             [
@@ -114,12 +114,13 @@ class CrawlsiteController extends Controller
     {
         Log::info('dispatchJob controller method is hit');
 
-        
-        // Dispatch the job
-        Bus::dispatch(new CrawlerJob($crawlsite));
+        $url = $request->input('url'); // Replace 'url' with the actual parameter name from your request
+        $crawlsiteId = $crawlsite->id;
+
+        // Dispatch the job with both URL and crawlsite_id as arguments
+        Bus::dispatch(new CrawlerJob($url, $crawlsiteId));
 
         // Optionally, you can redirect back to the view page
         return back()->with('message', 'Job dispatched successfully');
     }
 }
-

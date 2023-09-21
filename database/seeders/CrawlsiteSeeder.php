@@ -13,6 +13,18 @@ class CrawlsiteSeeder extends Seeder
      */
     public function run(): void
     {
-        Crawlsite::factory(10)->create();
+        $canadianNewsWebsites = [
+            ['title' => 'CBC News', 'url' => 'https://www.cbc.ca/'],
+            ['title' => 'CTV News', 'url' => 'https://www.ctvnews.ca/'],
+            ['title' => 'Global News', 'url' => 'https://globalnews.ca/'],
+            ['title' => 'The Globe and Mail', 'url' => 'https://www.theglobeandmail.com/'],
+            ['title' => 'National Post', 'url' => 'https://nationalpost.com/'],
+            // Add more websites here
+        ];
+
+        // Create Crawlsite records for the Canadian news websites
+        foreach ($canadianNewsWebsites as $website) {
+            Crawlsite::create($website);
+        }
     }
 }
