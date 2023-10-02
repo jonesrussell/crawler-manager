@@ -46,13 +46,12 @@ const dispatchJob = async (jobName) => {
               <div>
                 <p>ID: {{ crawlsite.id }}</p>
                 <p>URL: {{ crawlsite.url }}</p>
-                <!-- Add more details as needed -->
+                <p>Search Terms: {{ crawlsite.searchTerms }}</p>
 
                 <!-- Display List of Jobs -->
                 <h3 class="text-lg font-semibold mt-4">Jobs:</h3>
                 <ul>
                   <li v-for="job in jobs" :key="job.id">
-                    <!-- Replace Link with button -->
                     <button @click="dispatchJob(job.name)" class="text-blue-600 underline">
                       {{ job.name }}
                     </button>

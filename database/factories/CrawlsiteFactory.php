@@ -16,9 +16,12 @@ class CrawlsiteFactory extends Factory
      */
     public function definition(): array
     {
+        $searchTerms = implode(',', $this->faker->words(5));
+
         return [
             'title' => $this->faker->sentence,
             'url' => $this->faker->url,
+            'searchTerms' => $searchTerms,
         ];
     }
 }

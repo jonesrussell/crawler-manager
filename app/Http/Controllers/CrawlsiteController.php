@@ -112,11 +112,14 @@ class CrawlsiteController extends Controller
     {
         Log::info('dispatchJob controller method is hit');
 
-        $url = $crawlsite->url;
-        $crawlsiteId = $crawlsite->id;
+        $data = [
+            'url' => $crawlsite->url,
+            'searchTerms' => $crawlsite->searchTerms,
+            'crawlsiteId' => $crawlsite->id,
+        ];
 
-        // Dispatch the job with both URL and crawlsite_id as arguments
-        CrawlerJob::dispatch($url, $crawlsiteId);
+        // Dispatch the job with the keyed data as an argument
+        CrawlerJob::dispatch($data);
 
         // Optionally, you can redirect back to the view page
         return back()->with('message', 'Job dispatched successfully');

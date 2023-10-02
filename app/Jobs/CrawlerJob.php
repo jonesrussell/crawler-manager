@@ -15,13 +15,11 @@ class CrawlerJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $url;
-    protected $crawlsiteId;
+    protected $data;
 
-    public function __construct($url, $crawlsiteId)
+    public function __construct(array $data) // Modify the constructor to accept the data array
     {
-        $this->url = $url;
-        $this->crawlsiteId = $crawlsiteId;
+        $this->data = $data;
     }
 
     /**
@@ -32,8 +30,10 @@ class CrawlerJob implements ShouldQueue
         // Log that the job has started
         Log::info("CrawlerJob started for crawling.");
 
-        $url = $this->url;
-        $crawlsiteId = $this->crawlsiteId;
+        // Extract data from the data array
+        $url = $this->data['url'];
+        $searchTerms = $this->data['searchTerms'];
+        $crawlsiteId = $this->data['crawlsiteId'];
 
         $crawlerBinaryPath = config('app.crawler_binary');
 
@@ -45,7 +45,7 @@ class CrawlerJob implements ShouldQueue
         }
 
         // Define the command to run your crawler binary with arguments
-        $crawlerCommand = "{$crawlerBinaryPath} --url={$url} foo";
+        $crawlerCommand = "{$crawlerBinaryPath} --url={$url} --search={$searchTerms}";
 
         // Log the full command before executing it
         Log::info("Running Crawler command: $crawlerCommand");
@@ -67,7 +67,8 @@ class CrawlerJob implements ShouldQueue
 
             // Create a new CrawlerJobRun record associated with a Crawlsite
             CrawlerJobRun::create([
-                'crawlsite_id' => $crawlsiteId, // Replace with the actual Crawlsite ID
+                'crawlsite_id' => $crawlsiteId, 
+                // 'search_terms' => $searchTerms,
                 // Add other attributes you want to store for this run
             ]);
         } else {

@@ -12,5 +12,6 @@ class Crawlsite extends Model
     protected $fillable = [
         'title',
         'url',
+        'searchTerms',
     ];
 }
