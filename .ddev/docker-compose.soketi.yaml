@@ -1,0 +1,23 @@
+version: '3.6'
+services:
+  soketi:
+    container_name: ddev-${DDEV_SITENAME}-soketi
+    image: quay.io/soketi/soketi:latest-16-alpine
+    hostname: ${DDEV_SITENAME}-soketi
+    expose:
+      - "9601"
+    # These labels ensure this service is discoverable by ddev.
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
+    volumes:
+      - ".:/mnt/ddev_config"
+    environment:
+      DB_REDIS_HOST: "redis"
+      # DB_REDIS_PASSWORD: "redispassword"
+      DB_REDIS_KEY_PREFIX: "socketi"
+      VIRTUAL_HOST: $DDEV_HOSTNAME
+      HTTP_EXPOSE: 9601:9601
+    # The dependency below assumes you are using Redis. Remove if not needed.
+    depends_on:
+      - "redis"
