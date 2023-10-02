@@ -17,6 +17,7 @@ const form = useForm({
     id: props.Crawlsite.id,
     title: props.Crawlsite.title,
     content: props.Crawlsite.content,
+    searchTerms: props.Crawlsite.searchTerms,
 });
 
 const submit = () => {
@@ -43,16 +44,17 @@ const submit = () => {
                                 <!-- Editable Title -->
                                 <div class="mb-4">
                                     <InputLabel for="title" value="Title" />
-                                    <TextInput
-                                        id="title"
-                                        type="text"
-                                        class="mt-1 block w-full"
-                                        v-model="form.title"
-                                        required
-                                        autofocus
-                                    />
+                                    <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title"
+                                        required autofocus />
                                     <!-- Display error message if needed -->
                                     <InputError class="mt-2" :message="form.errors.title" />
+
+                                    <!-- Add Search Terms Input -->
+                                    <div class="mb-4">
+                                        <InputLabel for="searchTerms" value="Search Terms (comma-separated)" />
+                                        <TextInput id="searchTerms" type="text" class="mt-1 block w-full"
+                                            v-model="searchTerms" />
+                                    </div>
                                 </div>
                                 {{ Crawlsite.url }}
                             </div>
