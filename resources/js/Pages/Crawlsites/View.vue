@@ -1,8 +1,10 @@
 <script setup>
+import { ref, onMounted } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 
-let message = null;
+const message = ref(null);
+const broadcastData = ref(null);
 
 const props = defineProps({
   crawlsite: Object,
@@ -11,26 +13,26 @@ const props = defineProps({
 
 const dispatchJob = async (jobName) => {
   try {
-    // Make a POST request to the dispatchJob route
     const route2 = route('crawlsites.dispatchJob', { crawlsite: props.crawlsite.id });
-  
-    console.log('route', route2);
-
     await router.post(route2, { jobName });
     console.log(`Dispatched job: ${jobName}`);
-    // Optionally, you can show a success message or update the UI
   } catch (error) {
     console.error(`Failed to dispatch job: ${jobName}`, error);
-    // Handle any errors or show an error message
   }
 };
+
+// Listen for the broadcast and update broadcastData
+window.Echo.private('crawler-job-output')
+  .listen('CrawlerJobOutputEvent', (e) => {
+    console.log('Received broadcast data:', e.output);
+    broadcastData.value = e.output;
+    // Handle the broadcast data here
+  });
 </script>
 
-<!-- resources/js/Pages/Crawlsites/View.vue -->
 <template>
   <div>
     <Head title="Crawlsite View" />
-
     <AuthenticatedLayout>
       <template #header>
         <h2 class="text-xl font-semibold leading-tight text-gray-800">
@@ -38,18 +40,26 @@ const dispatchJob = async (jobName) => {
         </h2>
       </template>
 
+      <!-- Message Section -->
+      <div v-if="message" class="mt-4 p-4 bg-green-100 rounded border border-green-400">
+        <h3 class="text-lg font-semibold mb-2">Message:</h3>
+        <p>{{ message }}</p>
+      </div>
+
+      <!-- Content and Broadcasted Output Sections -->
       <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
               <!-- Display Crawlsite Details -->
               <div>
+                <h3 class="text-lg font-semibold mb-4">Content:</h3>
                 <p>ID: {{ crawlsite.id }}</p>
                 <p>URL: {{ crawlsite.url }}</p>
                 <p>Search Terms: {{ crawlsite.searchTerms }}</p>
-
+                
                 <!-- Display List of Jobs -->
-                <h3 class="text-lg font-semibold mt-4">Jobs:</h3>
+                <h4 class="text-base font-semibold mt-4">Jobs:</h4>
                 <ul>
                   <li v-for="job in jobs" :key="job.id">
                     <button @click="dispatchJob(job.name)" class="text-blue-600 underline">
@@ -59,13 +69,16 @@ const dispatchJob = async (jobName) => {
                 </ul>
               </div>
             </div>
+
+            <!-- Broadcasted Output Section -->
+            <div class="p-6 bg-white border-b border-gray-200 mt-4">
+              <h3 class="text-lg font-semibold mb-2">Broadcasted Output:</h3>
+              <pre v-if="broadcastData">{{ broadcastData }}</pre>
+            </div>
           </div>
         </div>
       </div>
     </AuthenticatedLayout>
-
-    <div v-if="message" class="mt-4 bg-green-200 p-2 rounded">
-      {{ message }}
-    </div>
   </div>
 </template>
+

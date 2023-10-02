@@ -33,10 +33,3 @@ window.Echo = new Echo({
     disableStats: true,
     enabledTransports: ['ws'], 
 });
-
-// Listen for the broadcast
-window.Echo.private('crawler-job-output')
-    .listen('CrawlerJobOutputEvent', (e) => {
-        console.log('Received broadcast data:', e.output);
-        // Handle the broadcast data here
-    });
