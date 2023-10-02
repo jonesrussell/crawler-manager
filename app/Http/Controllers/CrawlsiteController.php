@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Crawlsite;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Jobs\CrawlerJob;
@@ -118,7 +116,7 @@ class CrawlsiteController extends Controller
         $crawlsiteId = $crawlsite->id;
 
         // Dispatch the job with both URL and crawlsite_id as arguments
-        Bus::dispatch(new CrawlerJob($url, $crawlsiteId));
+        CrawlerJob::dispatch($url, $crawlsiteId);
 
         // Optionally, you can redirect back to the view page
         return back()->with('message', 'Job dispatched successfully');
