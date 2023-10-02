@@ -16,3 +16,9 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('crawler-job-output', function ($user) {
+    // Return true to authorize the user to listen to the channel.
+    // You can add custom logic here to determine authorization.
+    return true; // Change this as per your authorization requirements.
+});

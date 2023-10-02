@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\CrawlerJobOutputEvent;
 use App\Models\CrawlerJobRun;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Log;
@@ -17,20 +18,15 @@ class CrawlerJob implements ShouldQueue
 
     protected $data;
 
-    public function __construct(array $data) // Modify the constructor to accept the data array
+    public function __construct(array $data)
     {
         $this->data = $data;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle()
     {
-        // Log that the job has started
         Log::info("CrawlerJob started for crawling.");
 
-        // Extract data from the data array
         $url = $this->data['url'];
         $searchTerms = $this->data['searchTerms'];
         $crawlsiteId = $this->data['crawlsiteId'];
@@ -38,54 +34,40 @@ class CrawlerJob implements ShouldQueue
         $crawlerBinaryPath = config('app.crawler_binary');
 
         if (!file_exists($crawlerBinaryPath)) {
-            // Handle the case where the binary doesn't exist
             $this->fail("Crawler binary does not exist at {$crawlerBinaryPath}");
             Log::error("Crawler binary does not exist at {$crawlerBinaryPath}");
             return;
         }
 
-        // Define the command to run your crawler binary with arguments
         $crawlerCommand = "{$crawlerBinaryPath} --url={$url} --search={$searchTerms}";
 
-        // Log the full command before executing it
         Log::info("Running Crawler command: $crawlerCommand");
 
-        // Execute the command using Laravel's Process facade
         $result = Process::forever()->run($crawlerCommand);
 
-        // Log the standard output
-        Log::info("Crawler job output: " . $result->output());
+        $output = $result->output(); // Assign the output here
 
-        // Log the error output
+        Log::info("Crawler job output: " . $output);
         Log::error("Crawler job error output: " . $result->errorOutput());
 
-        // Check if the process was successful
+        event(new CrawlerJobOutputEvent($output)); // Pass $output to the event
+
         if ($result->successful()) {
-            $output = $result->output();
-            // Log the output
             Log::info("Crawler job output: $output");
 
-            // Create a new CrawlerJobRun record associated with a Crawlsite
-            CrawlerJobRun::create([
-                'crawlsite_id' => $crawlsiteId, 
-                // 'search_terms' => $searchTerms,
-                // Add other attributes you want to store for this run
-            ]);
-        } else {
-            // Handle failure
-            $errorOutput = $result->errorOutput();
-            // Log or handle the error
-            Log::error("Crawler job failed with error: $errorOutput");
-
-            // Create a failed CrawlerJobRun record
             CrawlerJobRun::create([
                 'crawlsite_id' => $crawlsiteId,
-                'failed' => true, // You can add a 'failed' column to indicate failure
-                // Add other attributes if needed
+            ]);
+        } else {
+            $errorOutput = $result->errorOutput();
+            Log::error("Crawler job failed with error: $errorOutput");
+
+            CrawlerJobRun::create([
+                'crawlsite_id' => $crawlsiteId,
+                'failed' => true,
             ]);
         }
 
-        // Log that the job has completed
         Log::info("CrawlerJob completed.");
     }
 }
