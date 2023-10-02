@@ -45,7 +45,7 @@ class CrawlerJob implements ShouldQueue
         }
 
         // Define the command to run your crawler binary with arguments
-        $crawlerCommand = "{$crawlerBinaryPath} {$url} foo";
+        $crawlerCommand = "{$crawlerBinaryPath} --url={$url} foo";
 
         // Log the full command before executing it
         Log::info("Running Crawler command: $crawlerCommand");
