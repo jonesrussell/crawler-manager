@@ -47,8 +47,8 @@ class CrawlerJob implements ShouldQueue
 
         $output = $result->output(); // Assign the output here
 
-        Log::info("Crawler job output: " . $output);
-        Log::error("Crawler job error output: " . $result->errorOutput());
+        // Log::info("Crawler job output: " . $output);
+        // Log::error("Crawler job error output: " . $result->errorOutput());
 
         event(new CrawlerJobOutputEvent($output)); // Pass $output to the event
 

@@ -41,6 +41,7 @@ return [
                 'scheme' => env('PUSHER_SCHEME', 'http'),
                 'encrypted' => false,
                 'useTLS' => false,
+                'cluster' => env('PUSHER_APP_CLUSTER'),
             ],
         ],
 
