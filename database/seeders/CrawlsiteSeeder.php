@@ -14,7 +14,7 @@ class CrawlsiteSeeder extends Seeder
     public function run(): void
     {
         $canadianNewsWebsites = [
-            ['title' => 'CP24', 'url' => 'https://www.cp24.com/news', 'searchTerms' => 'prescription,gang,drug,JOINT,CANNABI,IMPAIR,SHOOT,FIREARM,MURDER,COCAIN,POSSESS'],
+            ['title' => 'CP24 News', 'url' => 'https://www.cp24.com/news', 'searchTerms' => 'prescription,gang,drug,JOINT,CANNABI,IMPAIR,SHOOT,FIREARM,MURDER,COCAIN,POSSESS'],
             ['title' => 'CBC News', 'url' => 'https://www.cbc.ca/', 'searchTerms' => 'gang,drugs,cocaine,fentanyl,meth'],
             ['title' => 'CTV News', 'url' => 'https://www.ctvnews.ca/', 'searchTerms' => 'news,Canada'],
             ['title' => 'Global News', 'url' => 'https://globalnews.ca/', 'searchTerms' => 'news,Canada'],
