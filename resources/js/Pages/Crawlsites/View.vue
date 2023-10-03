@@ -13,8 +13,8 @@ const props = defineProps({
 
 const dispatchJob = async (jobName) => {
   try {
-    const route2 = route('crawlsites.dispatchJob', { crawlsite: props.crawlsite.id });
-    await router.post(route2, { jobName });
+    const dispatchRoute = route('crawlsites.dispatchJob', { crawlsite: props.crawlsite.id });
+    await router.post(dispatchRoute, { jobName });
     console.log(`Dispatched job: ${jobName}`);
   } catch (error) {
     console.error(`Failed to dispatch job: ${jobName}`, error);
@@ -81,4 +81,3 @@ window.Echo.private('crawler-job-output')
     </AuthenticatedLayout>
   </div>
 </template>
-
