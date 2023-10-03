@@ -9,7 +9,10 @@ class CrawlerJobRun extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['crawlsite_id', /* other fillable attributes */];
+    protected $fillable = [
+        'crawlsite_id',
+        'output',
+    ];
 
     public function crawlsite()
     {

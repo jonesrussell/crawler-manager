@@ -57,6 +57,7 @@ class CrawlerJob implements ShouldQueue
 
             CrawlerJobRun::create([
                 'crawlsite_id' => $crawlsiteId,
+                'output' => $output,
             ]);
         } else {
             $errorOutput = $result->errorOutput();
@@ -65,6 +66,7 @@ class CrawlerJob implements ShouldQueue
             CrawlerJobRun::create([
                 'crawlsite_id' => $crawlsiteId,
                 'failed' => true,
+                'output' => $output,
             ]);
         }
 
