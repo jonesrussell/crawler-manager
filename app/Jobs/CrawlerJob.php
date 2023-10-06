@@ -39,16 +39,13 @@ class CrawlerJob implements ShouldQueue
             return;
         }
 
-        $crawlerCommand = "{$crawlerBinaryPath} --url={$url} --search={$searchTerms}";
+        $crawlerCommand = "{$crawlerBinaryPath} --url={$url} --search=\"{$searchTerms}\" --crawlsite={$crawlsiteId}";
 
         Log::info("Running Crawler command: $crawlerCommand");
 
         $result = Process::forever()->run($crawlerCommand);
 
         $output = $result->output(); // Assign the output here
-
-        // Log::info("Crawler job output: " . $output);
-        // Log::error("Crawler job error output: " . $result->errorOutput());
 
         event(new CrawlerJobOutputEvent($output)); // Pass $output to the event
 
