@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('crawler_job_runs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('crawlsite_id'); // Foreign key
-            $table->text('output')->nullable(); 
+            $table->longText('output')->nullable(); 
             $table->timestamps();
 
             // Define foreign key constraint

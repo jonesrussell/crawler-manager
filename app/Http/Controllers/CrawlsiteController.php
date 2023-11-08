@@ -116,7 +116,7 @@ class CrawlsiteController extends Controller
             'crawlsiteId' => $crawlsite->id,
         ];
 
-        CrawlerJob::dispatch($data);
+        CrawlerJob::dispatch($data)->onQueue('crawler_queue');
 
         return back()->with('message', 'Job dispatched successfully');
     }
