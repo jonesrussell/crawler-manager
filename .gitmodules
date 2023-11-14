@@ -1,0 +1,3 @@
+[submodule "submodules/page-prowler"]
+	path = submodules/page-prowler
+	url = https://github.com/jonesrussell/page-prowler
