@@ -54,7 +54,7 @@ class CrawlerJob implements ShouldQueue
             return;
         }
 
-        $crawlerCommand = "{$crawlerBinaryPath} --url={$url} --search=\"{$searchTerms}\" --crawlsite={$crawlsiteId}";
+        $crawlerCommand = "{$crawlerBinaryPath} crawl --url={$url} --search=\"{$searchTerms}\" --crawlsite={$crawlsiteId}";
 
         Log::info("Running Crawler command: $crawlerCommand");
 
