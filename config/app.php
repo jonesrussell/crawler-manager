@@ -186,6 +186,5 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
-    'crawler_binary' => env('CRAWLER_BINARY', '/var/www/html/resources/bin/crawler'),
-
+    'crawler_binary' => env('CRAWLER_BINARY', '/var/www/html/submodules/page-prowler/bin/page-prowler'),
 ];
