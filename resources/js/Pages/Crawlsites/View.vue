@@ -1,41 +1,71 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, router } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
+import axios from 'axios';
 
 const message = ref(null);
-const broadcastData = ref(null);
 
 const props = defineProps({
   crawlsite: Object,
-  jobs: Array,
 });
 
-const dispatchJob = async (jobName) => {
+let responseData = ref(null);
+
+const sendRequest = async () => {
+  const url = 'https://localhost:3000/v1/matchlinks';
+  const data = {
+    Url: 'https://www.jonesrussell42.xyz',
+    SearchTerms: 'PRIVACY',
+    CrawlSiteId: 'jr42',
+    MaxDepth: 3
+  };
+
   try {
-    const dispatchRoute = route('crawlsites.dispatchJob', { crawlsite: props.crawlsite.id });
-    await router.post(dispatchRoute, { jobName });
-    console.log(`Dispatched job: ${jobName}`);
+    const response = await axios.post(url, data);
+    const result = response.data;
+    console.log(result);
+    responseData.value = result;
+
+    // Retrieve the ID from the response
+    const id = result.task_id;
+
+    if (id) {
+      storeTaskId(id, props.crawlsite.id);
+    } else {
+      console.error('Task ID is missing');
+    }
+
   } catch (error) {
-    console.error(`Failed to dispatch job: ${jobName}`, error);
+    console.error('Error:', error);
   }
 };
 
-// Listen for the broadcast and update broadcastData
-window.Echo.private('crawler-job-output')
-  .listen('CrawlerJobOutputEvent', (e) => {
-    console.log('Received broadcast data:', e.output);
-    broadcastData.value = e.output;
-    // Handle the broadcast data here
-  });
+const storeTaskId = async (taskId, crawlsiteId) => {
+  const url = '/store-task-id'; // replace with your actual endpoint
+  const data = {
+    task_id: taskId,
+    crawlsite_id: crawlsiteId,
+  };
+
+  try {
+    const response = await axios.post(url, data);
+    const result = response.data;
+    console.log(result);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
 </script>
 
 <template>
   <div>
+
     <Head title="Crawlsite View" />
     <AuthenticatedLayout>
       <template #header>
-        <h2 class="text-xl font-semibold leading-tight text-gray-800">
+        <h2 class="text-xl font-semibold leading-tight text-white">
           {{ crawlsite.title }}
         </h2>
       </template>
@@ -46,34 +76,29 @@ window.Echo.private('crawler-job-output')
         <p>{{ message }}</p>
       </div>
 
-      <!-- Content and Broadcasted Output Sections -->
+      <!-- Content Section -->
       <div class="py-12">
         <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
               <!-- Display Crawlsite Details -->
-              <div>
-                <h3 class="text-lg font-semibold mb-4">Content:</h3>
-                <p>ID: {{ crawlsite.id }}</p>
-                <p>URL: {{ crawlsite.url }}</p>
-                <p>Search Terms: {{ crawlsite.searchTerms }}</p>
-                
-                <!-- Display List of Jobs -->
-                <h4 class="text-base font-semibold mt-4">Jobs:</h4>
-                <ul>
-                  <li v-for="job in jobs" :key="job.id">
-                    <button @click="dispatchJob(job.name)" class="text-blue-600 underline">
-                      {{ job.name }}
-                    </button>
-                  </li>
-                </ul>
+              <div class="mb-4">
+                <h3 class="text-lg font-semibold mb-2">Content:</h3>
+                <p><strong>ID:</strong> {{ crawlsite.id }}</p>
+                <p><strong>URL:</strong> {{ crawlsite.url }}</p>
+                <p><strong>Search Terms:</strong> {{ crawlsite.searchTerms }}</p>
               </div>
-            </div>
 
-            <!-- Broadcasted Output Section -->
-            <div class="p-6 bg-white border-b border-gray-200 mt-4">
-              <h3 class="text-lg font-semibold mb-2">Broadcasted Output:</h3>
-              <pre v-if="broadcastData">{{ broadcastData }}</pre>
+              <!-- Button Section -->
+              <div class="mt-4">
+                <button @click="sendRequest" class="px-4 py-2 bg-blue-500 text-white rounded">Send Request</button>
+              </div>
+
+              <!-- Response Section -->
+              <div v-if="responseData" class="mt-4 p-4 bg-green-100 rounded border border-green-400">
+                <h3 class="text-lg font-semibold mb-2">Response:</h3>
+                <pre>{{ responseData }}</pre>
+              </div>
             </div>
           </div>
         </div>
