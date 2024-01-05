@@ -2,15 +2,18 @@ import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
+const port = 5173;  // Set the port to match the one exposed via DDEV
+const origin = `${process.env.DDEV_PRIMARY_URL}:${port}`;
+
 export default defineConfig({
     server: {
-        // ... other server settings ...
-        host: '0.0.0.0', // Listen to all network requests
+        host: '0.0.0.0',
         strictPort: true,
-        port: 5173, // Set the port to match the one exposed via DDEV
+        port: port,
+        origin: origin,
         hmr: {
             protocol: 'wss',
-            host: `${process.env.DDEV_HOSTNAME}`,
+            host: 'crawler-manager.ddev.site',
         },
     },
     plugins: [
