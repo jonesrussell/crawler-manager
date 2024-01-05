@@ -20,6 +20,9 @@ web_extra_exposed_ports:
     https_port: 5173
 #webimage_extra_packages: [golang, make]
 webimage_extra_packages: [build-essential]
+hooks:
+  post-start:
+    - exec: "npm run dev -- --host"
 
 # Key features of ddev's config.yaml:
 
