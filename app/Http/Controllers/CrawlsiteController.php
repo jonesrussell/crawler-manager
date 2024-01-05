@@ -57,15 +57,12 @@ class CrawlsiteController extends Controller
      */
     public function show(Crawlsite $crawlsite)
     {
-        // Define a list of jobs
-        $jobs = [
-            ['name' => 'CrawlerJob', 'description' => 'Crawls a website'],
-            // ['name' => 'AnotherJob', 'description' => 'Another job description'],
-        ];
+        // Fetch the tasks for the crawl site
+        $tasks = Task::where('crawlsite_id', $crawlsite->id)->get();
 
         return Inertia::render('Crawlsites/View', [
             'crawlsite' => $crawlsite,
-            'jobs' => $jobs, // Pass the list of jobs as the 'jobs' prop
+            'tasks' => $tasks, // Pass the tasks as the 'tasks' prop
         ]);
     }
 
@@ -122,25 +119,25 @@ class CrawlsiteController extends Controller
         return back()->with('message', 'Job dispatched successfully');
     }
 
-    public function storeTaskId(Request $request) {
+    public function storeTaskId(Request $request)
+    {
         // Validate the request...
         $validated = $request->validate([
             'task_id' => 'required',
             'crawlsite_id' => 'required',
         ]);
-     
+
         // Get the current user's ID
         $userId = auth()->id();
-     
+
         // Store the task_id and user_id in the database...
         $task = new Task; // replace 'Task' with your actual model
         $task->id = $validated['task_id'];
         $task->user_id = $userId;
         $task->crawlsite_id = $validated['crawlsite_id'];
         $task->save();
-     
+
         // Return a response...
         return response()->json(['message' => 'Task ID stored successfully']);
-     }
-    
+    }
 }

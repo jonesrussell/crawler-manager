@@ -8,6 +8,7 @@ const message = ref(null);
 
 const props = defineProps({
   crawlsite: Object,
+  tasks: Array,
 });
 
 let responseData = ref(null);
@@ -15,9 +16,9 @@ let responseData = ref(null);
 const sendRequest = async () => {
   const url = 'https://localhost:3000/v1/matchlinks';
   const data = {
-    Url: 'https://www.jonesrussell42.xyz',
-    SearchTerms: 'PRIVACY',
-    CrawlSiteId: 'jr42',
+    Url: props.crawlsite.url,
+    SearchTerms: props.crawlsite.searchTerms,
+    CrawlSiteId: props.crawlsite.id,
     MaxDepth: 3
   };
 
@@ -98,6 +99,27 @@ const storeTaskId = async (taskId, crawlsiteId) => {
               <div v-if="responseData" class="mt-4 p-4 bg-green-100 rounded border border-green-400">
                 <h3 class="text-lg font-semibold mb-2">Response:</h3>
                 <pre>{{ responseData }}</pre>
+              </div>
+
+              <!-- Tasks Section -->
+              <div v-if="tasks && tasks.length > 0" class="mt-4 p-4 bg-green-100 rounded border border-green-400">
+                <h3 class="text-lg font-semibold mb-2">Tasks:</h3>
+                <table class="table-auto w-full">
+                  <thead>
+                    <tr>
+                      <th class="px-4 py-2">Task ID</th>
+                      <th class="px-4 py-2">User ID</th>
+                      <!-- Add more columns as needed -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="task in tasks" :key="task.id">
+                      <td class="border px-4 py-2">{{ task.id }}</td>
+                      <td class="border px-4 py-2">{{ task.user_id }}</td>
+                      <!-- Render more columns as needed -->
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
