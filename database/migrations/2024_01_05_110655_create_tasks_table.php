@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('crawlsites', function (Blueprint $table) {
+        Schema::create('tasks', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('title');
-            $table->string('url');
-            $table->text('searchTerms')->nullable();
+            $table->foreignUuid('crawlsite_id')->constrained('crawlsites')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-         });    }
+        });
+    }
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('crawlsites');
+        Schema::dropIfExists('tasks');
     }
 };

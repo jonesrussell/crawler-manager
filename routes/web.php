@@ -41,5 +41,6 @@ Route::middleware('auth')->group(function () {
 Route::post('/crawlsites/{crawlsite}/dispatch-job', [CrawlsiteController::class, 'dispatchJob'])
 ->name('crawlsites.dispatchJob');
 
+Route::post('/store-task-id', [CrawlsiteController::class, 'storeTaskId'])->name('crawlsites.storeTaskId');
 
 require __DIR__.'/auth.php';

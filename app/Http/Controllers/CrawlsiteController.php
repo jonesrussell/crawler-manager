@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Crawlsite;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Jobs\CrawlerJob;
@@ -120,4 +121,26 @@ class CrawlsiteController extends Controller
 
         return back()->with('message', 'Job dispatched successfully');
     }
+
+    public function storeTaskId(Request $request) {
+        // Validate the request...
+        $validated = $request->validate([
+            'task_id' => 'required',
+            'crawlsite_id' => 'required',
+        ]);
+     
+        // Get the current user's ID
+        $userId = auth()->id();
+     
+        // Store the task_id and user_id in the database...
+        $task = new Task; // replace 'Task' with your actual model
+        $task->id = $validated['task_id'];
+        $task->user_id = $userId;
+        $task->crawlsite_id = $validated['crawlsite_id'];
+        $task->save();
+     
+        // Return a response...
+        return response()->json(['message' => 'Task ID stored successfully']);
+     }
+    
 }
