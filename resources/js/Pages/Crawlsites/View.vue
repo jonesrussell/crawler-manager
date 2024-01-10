@@ -92,7 +92,7 @@ const storeTaskId = async (taskId, crawlsiteId) => {
 
               <!-- Button Section -->
               <div class="mt-4">
-                <button @click="sendRequest" class="px-4 py-2 bg-blue-500 text-white rounded">Send Request</button>
+                <button @click="sendRequest" class="px-4 py-2 bg-blue-500 text-white rounded">Crawl Site</button>
               </div>
 
               <!-- Response Section -->
