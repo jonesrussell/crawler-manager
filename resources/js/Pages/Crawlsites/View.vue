@@ -11,6 +11,7 @@ const message = ref(null);
 const props = defineProps({
   crawlsite: Object,
   tasks: Array,
+  articles: Array,
 });
 
 const sendRequest = async () => {
@@ -66,6 +67,24 @@ const getLinks = async () => {
     const result = response.data;
     console.log(result);
     message.value = JSON.stringify(result, null, 2);
+
+    // Save the links to the database
+    for (let link of result.links) {
+      const article = {
+        url: link.url,
+        crawlsite_id: props.crawlsite.id,
+      };
+
+      console.log('article', article);
+
+      try {
+        const response = await axios.post('/store-article', article);
+        const result = response.data;
+        console.log(result);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
   } catch (error) {
     console.error('Error:', error);
   }
@@ -106,6 +125,16 @@ const getLinks = async () => {
 
               <!-- Tasks Section -->
               <Tasks :tasks="tasks" />
+
+              <!-- Articles Section -->
+              <div class="mt-4">
+                <h3 class="text-lg font-semibold mb-2">Articles:</h3>
+                <ul>
+                  <li v-for="article in articles" :key="article.id">
+                    <a :href="article.url" target="_blank">{{ article.url }}</a>
+                  </li>
+                </ul>
+              </div>
 
             </div>
           </div>

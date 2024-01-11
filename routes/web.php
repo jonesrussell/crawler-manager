@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CrawlsiteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -39,8 +40,10 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('/crawlsites/{crawlsite}/dispatch-job', [CrawlsiteController::class, 'dispatchJob'])
-->name('crawlsites.dispatchJob');
+    ->name('crawlsites.dispatchJob');
 
 Route::post('/store-task-id', [CrawlsiteController::class, 'storeTaskId'])->name('crawlsites.storeTaskId');
 
-require __DIR__.'/auth.php';
+Route::post('/store-article', [ArticleController::class, 'store']);
+
+require __DIR__ . '/auth.php';

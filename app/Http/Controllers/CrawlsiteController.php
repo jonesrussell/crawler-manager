@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
 use App\Models\Crawlsite;
 use App\Models\Task;
 use Illuminate\Http\Request;
@@ -60,9 +61,13 @@ class CrawlsiteController extends Controller
         // Fetch the tasks for the crawl site
         $tasks = Task::where('crawlsite_id', $crawlsite->id)->get();
 
+        // Fetch the articles for the crawl site
+        $articles = Article::where('crawlsite_id', $crawlsite->id)->get();
+
         return Inertia::render('Crawlsites/View', [
             'crawlsite' => $crawlsite,
             'tasks' => $tasks, // Pass the tasks as the 'tasks' prop
+            'articles' => $articles,
         ]);
     }
 
