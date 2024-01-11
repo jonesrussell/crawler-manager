@@ -11,12 +11,21 @@ class ArticleController extends Controller
     {
         // Validate the request...
         $validated = $request->validate([
-            'url' => 'required|string|max:255',
+            'urls.*' => 'required|string|max:255',
             'crawlsite_id' => 'required',
         ]);
 
-        $article = Article::create($validated);
+        foreach ($validated['urls'] as $url) {
+            Article::firstOrCreate(
+                [
+                    'url' => $url,
+                    'crawlsite_id' => $validated['crawlsite_id']
+                ]
+            );
+        }
 
-        return response()->json($article, 201);
+        return response()->json([
+            'message' => 'Articles Created Successfully',
+        ], 201);
     }
 }

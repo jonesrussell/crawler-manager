@@ -59,6 +59,16 @@ const storeTaskId = async (taskId, crawlsiteId) => {
   }
 };
 
+const storeArticle = async (article) => {
+  try {
+    const response = await axios.post('/store-article', article);
+    const result = response.data;
+    console.log(result);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
 const getLinks = async () => {
   const url = `https://localhost:3000/v1/getlinks?crawlsiteid=${props.crawlsite.id}`;
 
@@ -69,22 +79,19 @@ const getLinks = async () => {
     message.value = JSON.stringify(result, null, 2);
 
     // Save the links to the database
+    let urls = [];
     for (let link of result.links) {
-      const article = {
-        url: link.url,
-        crawlsite_id: props.crawlsite.id,
-      };
-
-      console.log('article', article);
-
-      try {
-        const response = await axios.post('/store-article', article);
-        const result = response.data;
-        console.log(result);
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      urls.push(link.url);
     }
+
+    const article = {
+      urls: urls,
+      crawlsite_id: props.crawlsite.id,
+    };
+
+    console.log('article', article);
+
+    await storeArticle(article);
   } catch (error) {
     console.error('Error:', error);
   }
