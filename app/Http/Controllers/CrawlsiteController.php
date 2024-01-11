@@ -64,7 +64,7 @@ class CrawlsiteController extends Controller
         // Fetch the articles for the crawl site
         $articles = Article::where('crawlsite_id', $crawlsite->id)->get();
 
-        return Inertia::render('Crawlsites/View', [
+        return Inertia::render('Crawlsites/CrawlsiteView', [
             'crawlsite' => $crawlsite,
             'tasks' => $tasks, // Pass the tasks as the 'tasks' prop
             'articles' => $articles,
