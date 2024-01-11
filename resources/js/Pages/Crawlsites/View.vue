@@ -4,6 +4,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import axios from 'axios';
 import MessageSection from "@/Components/MessageSection.vue";
+import Tasks from '@/Components/Tasks.vue'
 
 const message = ref(null);
 
@@ -11,8 +12,6 @@ const props = defineProps({
   crawlsite: Object,
   tasks: Array,
 });
-
-let responseData = ref(null);
 
 const sendRequest = async () => {
   const url = 'https://localhost:3000/v1/matchlinks';
@@ -27,7 +26,7 @@ const sendRequest = async () => {
     const response = await axios.post(url, data);
     const result = response.data;
     console.log(result);
-    message.value = JSON.stringify(result, null, 2); // Update message instead of responseData
+    message.value = JSON.stringify(result, null, 2);
 
     // Retrieve the ID from the response
     const id = result.task_id;
@@ -44,7 +43,7 @@ const sendRequest = async () => {
 };
 
 const storeTaskId = async (taskId, crawlsiteId) => {
-  const url = '/store-task-id'; // replace with your actual endpoint
+  const url = '/store-task-id';
   const data = {
     task_id: taskId,
     crawlsite_id: crawlsiteId,
@@ -59,6 +58,18 @@ const storeTaskId = async (taskId, crawlsiteId) => {
   }
 };
 
+const getLinks = async () => {
+  const url = `https://localhost:3000/v1/getlinks?crawlsiteid=${props.crawlsite.id}`;
+
+  try {
+    const response = await axios.get(url);
+    const result = response.data;
+    console.log(result);
+    message.value = JSON.stringify(result, null, 2);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 </script>
 
 <template>
@@ -90,32 +101,11 @@ const storeTaskId = async (taskId, crawlsiteId) => {
               <!-- Button Section -->
               <div class="mt-4">
                 <button @click="sendRequest" class="px-4 py-2 bg-blue-500 text-white rounded">Crawl Site</button>
+                <button @click="getLinks" class="px-4 py-2 bg-green-500 text-white rounded">Get Links</button>
               </div>
 
               <!-- Tasks Section -->
-              <div v-if="tasks && tasks.length > 0" class="mt-4 p-4 bg-green-100 rounded border border-green-400">
-                <h3 class="text-lg font-semibold mb-2">Tasks:</h3>
-                <table class="table-auto w-full">
-                  <thead>
-                    <tr>
-                      <th class="px-4 py-2">Task ID</th>
-                      <th class="px-4 py-2">User ID</th>
-                      <!-- Add more columns as needed -->
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="task in tasks" :key="task.id">
-                      <td class="border px-4 py-2">{{ task.id }}</td>
-                      <td class="border px-4 py-2">{{ task.user_id }}</td>
-                      <!-- Render more columns as needed -->
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div v-else class="mt-4 p-4 bg-red-100 rounded border border-red-400">
-                <h3 class="text-lg font-semibold mb-2">No Tasks Available</h3>
-                <p>There are currently no tasks available.</p>
-              </div>
+              <Tasks :tasks="tasks" />
 
             </div>
           </div>
