@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         // Seed other data using other seeders
         $this->call([
             CrawlsiteSeeder::class,
+            SearchTermsSeeder::class,
         ]);
     }
 }

@@ -33,7 +33,7 @@ const showingNavigationDropdown = ref(false);
 
                                 <!-- Add the link to /crawlsites -->
                                 <NavLink :href="route('crawlsites.index')" :active="route().current('crawlsites.index')">
-                                    Crawl Sites
+                                    Websites
                                 </NavLink>
                             </div>
 

@@ -1,27 +1,29 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { Head, useForm, ref } from '@inertiajs/vue3';
 
 const props = defineProps({
-    Crawlsite: {
-        type: Object,
-        default: () => ({}),
-    },
+  Crawlsite: {
+    type: Object,
+    default: () => ({}),
+  },
 });
 
 const form = useForm({
-    id: props.Crawlsite.id,
-    title: props.Crawlsite.title,
-    content: props.Crawlsite.content,
-    searchTerms: props.Crawlsite.searchTerms,
+  id: props.Crawlsite.id,
+  title: props.Crawlsite.title,
+  content: props.Crawlsite.content,
+  searchTerms: props.Crawlsite.searchTerms,
 });
 
+const searchTerms = ref(props.Crawlsite.searchTerms || '');
+
 const submit = () => {
-    form.put(route("crawlsites.update", props.Crawlsite.id));
+  form.put(route('crawlsites.update', props.Crawlsite.id));
 };
 </script>
 
@@ -44,16 +46,19 @@ const submit = () => {
                                 <!-- Editable Title -->
                                 <div class="mb-4">
                                     <InputLabel for="title" value="Title" />
-                                    <TextInput id="title" type="text" class="mt-1 block w-full" v-model="form.title"
+                                    <TextInput id="title" type="text"
+                                        class="mt-1 block w-full" v-model="form.title"
                                         required autofocus />
                                     <!-- Display error message if needed -->
                                     <InputError class="mt-2" :message="form.errors.title" />
 
                                     <!-- Add Search Terms Input -->
                                     <div class="mb-4">
-                                        <InputLabel for="searchTerms" value="Search Terms (comma-separated)" />
-                                        <TextInput id="searchTerms" type="text" class="mt-1 block w-full"
-                                            v-model="searchTerms" />
+                                        <InputLabel for="searchTerms"
+                                            value="Search Terms (comma-separated)" />
+                                        <TextInput id="searchTerms" type="text"
+                                            class="mt-1 block w-full"
+                                            v-model="searchTerms.value" />
                                     </div>
                                 </div>
                                 {{ Crawlsite.url }}

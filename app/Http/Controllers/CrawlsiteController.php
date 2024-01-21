@@ -8,7 +8,6 @@ use App\Models\Task;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Jobs\CrawlerJob;
-use Illuminate\Support\Facades\Log;
 
 class CrawlsiteController extends Controller
 {
@@ -20,7 +19,7 @@ class CrawlsiteController extends Controller
         $crawlsites = Crawlsite::all();
 
         return Inertia::render(
-            'Crawlsites/Index',
+            'Crawlsites/CrawlsiteIndex',
             [
                 'crawlsites' => $crawlsites,
             ]
@@ -33,7 +32,7 @@ class CrawlsiteController extends Controller
     public function create()
     {
         return Inertia::render(
-            'Crawlsites/Create'
+            'Crawlsites/CrawlsiteCreate'
         );
     }
 
@@ -44,13 +43,16 @@ class CrawlsiteController extends Controller
     {
         $request->validate([
             'url' => 'required|string|max:255',
+            'title' => 'required|string|max:255',
         ]);
         Crawlsite::create([
             'url' => $request->url,
+            'title' => $request->title,
         ]);
         sleep(1);
 
-        return redirect()->route('crawlsites.index')->with('message', 'Crawlsite Created Successfully');
+        return redirect()->route('crawlsites.index')
+            ->with('message', 'Crawlsite Created Successfully');
     }
 
     /**
@@ -77,7 +79,7 @@ class CrawlsiteController extends Controller
     public function edit(Crawlsite $Crawlsite)
     {
         return Inertia::render(
-            'Crawlsites/Edit',
+            'Crawlsites/CrawlsiteEdit',
             [
                 'Crawlsite' => $Crawlsite,
             ]

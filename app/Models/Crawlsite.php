@@ -26,4 +26,9 @@ class Crawlsite extends Model
    {
       return $this->hasMany(Article::class);
    }
+
+   public function searchTerms()
+   {
+      return $this->hasMany(SearchTerm::class);
+   }
 }

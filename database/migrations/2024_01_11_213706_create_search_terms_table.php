@@ -9,12 +9,11 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('tasks', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->foreignUlid('crawlsite_id')->constrained('crawlsites')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        Schema::create('search_terms', function (Blueprint $table) {
+            $table->id();
+            $table->string('term');
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tasks');
+        Schema::dropIfExists('search_terms');
     }
 };

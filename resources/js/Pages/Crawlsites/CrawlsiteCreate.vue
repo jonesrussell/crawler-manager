@@ -1,24 +1,18 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import TextInput from "@/Components/TextInput.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import InputError from "@/Components/InputError.vue";
-import { Head, useForm } from "@inertiajs/vue3";
-
-const props = defineProps({
-    crawlsites: {
-        type: Object,
-        default: () => ({}),
-    },
-});
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import TextInput from '@/Components/TextInput.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
+import { Head, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
-    url: "",
+  title: '',
+  url: '',
 });
 
 const submit = () => {
-    form.post(route("crawlsites.store"));
+  form.post(route('crawlsites.store'));
 };
 </script>
 
@@ -38,6 +32,22 @@ const submit = () => {
                     <div class="p-6 bg-[#171923] border-b border-gray-200">
                         <form @submit.prevent="submit">
                             <div>
+                                <InputLabel for="title" value="Title" />
+
+                                <TextInput
+                                    id="title"
+                                    type="text"
+                                    class="mt-1 block w-full"
+                                    v-model="form.title"
+                                    required
+                                    autofocus
+                                />
+
+                                <InputError
+                                    class="mt-2"
+                                    :message="form.errors.title"
+                                />
+
                                 <InputLabel for="url" value="URL" />
 
                                 <TextInput
@@ -69,4 +79,3 @@ const submit = () => {
         </div>
     </AuthenticatedLayout>
 </template>
-
