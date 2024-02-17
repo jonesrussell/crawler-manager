@@ -22,7 +22,7 @@ web_extra_exposed_ports:
 webimage_extra_packages: [build-essential]
 hooks:
   post-start:
-    - exec: "npm run dev -- --host"
+    - exec: "npm ci && npm run dev -- --host"
 
 # Key features of ddev's config.yaml:
 
