@@ -10,7 +10,7 @@
         "@vitejs/plugin-vue": "^4.6.2",
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.8.1",
-        "vite": "^4.5.2",
+        "vite": "^4.5.3",
         "vue": "^3.2.41"
     },
     "devDependencies": {
